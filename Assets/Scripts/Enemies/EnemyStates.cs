@@ -7,10 +7,12 @@ using UnityEngine;
 public class EIdleState : IState
 {
     private EnemyStateManager E_Manager;
+    private int patrolPointsCount;
 
-    public EIdleState(EnemyStateManager manager)
+    public EIdleState(EnemyStateManager manager, int patrolPointsCount)
     {
         this.E_Manager = manager;
+        this.patrolPointsCount = patrolPointsCount;
     }
 
     public void OnEnter()
@@ -27,18 +29,27 @@ public class EIdleState : IState
     public void OnUpdate()
     {
         //Keep playing Idle Animation
+        //If got hit back
+        if (E_Manager.IfHitback())
+        {
+            E_Manager.TransiteToState(StateType.Hitback);
+            return;
+        }
         //If player is within the attack range, transite to Attack state
-        if (Vector2.Distance(E_Manager.player.transform.position, E_Manager.transform.position) <= E_Manager.attackRange)
+        else if (E_Manager.IfWithinAttackRange())
         {
             E_Manager.TransiteToState(StateType.Attack);
+            return;
         }
         //If player is within the detect range, transite to MoveToPlayer state
-        else if (Vector2.Distance(E_Manager.player.transform.position, E_Manager.transform.position) <= E_Manager.detectRange)
+        else if (E_Manager.IfWithinDetectRange())
         {
             E_Manager.TransiteToState(StateType.MoveToPlayer);
+            return;
         }
+        
         //Otherwise patrol automaticly
-        else if (E_Manager.patrolPoints != null)
+        else if (patrolPointsCount != 0)
         {
             E_Manager.TransiteToState(StateType.Patrol);
         }
@@ -56,18 +67,7 @@ public class EPatrolState : IState
 
     public void OnEnter()
     {
-        //calculate which patrol point is the closest to the player
-        float minDis = Vector2.Distance(E_Manager.transform.position, E_Manager.patrolPoints[0].transform.position);
-        int minIndex = 0;
-        foreach (GameObject point in E_Manager.patrolPoints)
-        {
-            if (Vector2.Distance(E_Manager.transform.position, point.transform.position) < minDis)
-            {
-                minDis = Vector2.Distance(E_Manager.transform.position, point.transform.position);
-                minIndex = E_Manager.patrolPoints.IndexOf(point);
-            }
-        }
-        E_Manager.currentPatrolPoint = minIndex;
+        E_Manager.EnterPatrol();
 
     }
 
@@ -78,24 +78,27 @@ public class EPatrolState : IState
 
     public void OnUpdate()
     {
+        //If got hit back
+        if (E_Manager.IfHitback())
+        {
+            E_Manager.TransiteToState(StateType.Hitback);
+            return;
+        }
         //If player is within the attack range, transite to Attack state
-        if (Vector2.Distance(E_Manager.player.transform.position, E_Manager.transform.position) <= E_Manager.attackRange)
+        if (E_Manager.IfWithinAttackRange())
         {
             E_Manager.TransiteToState(StateType.Attack);
+            return;
         }
         //If player is within the detect range, transite to MoveToPlayer state
-        else if (Vector2.Distance(E_Manager.player.transform.position, E_Manager.transform.position) <= E_Manager.detectRange)
+        else if (E_Manager.IfWithinDetectRange())
         {
             E_Manager.TransiteToState(StateType.MoveToPlayer);
+            return;
         }
 
-        //If the enemy is close enough to the current patrol point, move to the next patrol point
-        if (Vector2.Distance(E_Manager.transform.position, E_Manager.patrolPoints[E_Manager.currentPatrolPoint].transform.position) < 0.01f)
-        {
-               E_Manager.currentPatrolPoint = (E_Manager.currentPatrolPoint + 1) % E_Manager.patrolPoints.Count;
-        }
-        //Get direction to the patrol point and move to it
-        E_Manager.MoveToTargetPoint(E_Manager.patrolPoints[E_Manager.currentPatrolPoint].transform.position - E_Manager.transform.position);
+        E_Manager.PatrolAlongRoute();
+        
     }
 
 }
@@ -103,9 +106,11 @@ public class EPatrolState : IState
 public class EMoveToPlayerState: IState
 {
     private EnemyStateManager E_Manager;
-    public EMoveToPlayerState(EnemyStateManager manager)
+    private int patrolPointsCount;
+    public EMoveToPlayerState(EnemyStateManager manager, int patrolPointsCount)
     {
         this.E_Manager = manager;
+        this.patrolPointsCount = patrolPointsCount;
     }
     public void OnEnter()
     {
@@ -117,18 +122,34 @@ public class EMoveToPlayerState: IState
     }
     public void OnUpdate()
     {
+        //If got hit back
+        if (E_Manager.IfHitback())
+        {
+            E_Manager.TransiteToState(StateType.Hitback);
+            return;
+        }
         //If player is within the attack range, transite to Attack state
-        if (Vector2.Distance(E_Manager.player.transform.position, E_Manager.transform.position) <= E_Manager.attackRange)
+        if (E_Manager.IfWithinAttackRange())
         {
             E_Manager.TransiteToState(StateType.Attack);
+            return;
         }
         //If player is outside the detect range, transite to Patrol state
-        else if (Vector2.Distance(E_Manager.player.transform.position, E_Manager.transform.position) > E_Manager.detectRange)
+        else if (!E_Manager.IfWithinDetectRange())
         {
-            E_Manager.TransiteToState(StateType.Patrol);
+            if (patrolPointsCount != 0)
+            {
+                E_Manager.TransiteToState(StateType.Patrol);
+                return;
+            }
+            else
+            {
+                E_Manager.TransiteToState(StateType.Idle);
+                return;
+            }
         }
-        //Get direction to the player and move to him
-        E_Manager.MoveToTargetPoint(E_Manager.player.transform.position- E_Manager.transform.position);
+        //Get position of the player and move to him
+        E_Manager.MovetoPlayer();
     }
 }
 
@@ -151,11 +172,94 @@ public class EAttackState: IState
     {
         //Do attack action
 
+
+        //If got hit back
+        if (E_Manager.IfHitback())
+        {
+            E_Manager.TransiteToState(StateType.Hitback);
+            return;
+        }
         //If player is outside the attack range, transite to MoveToPlayer state
-        if (Vector2.Distance(E_Manager.player.transform.position, E_Manager.transform.position) > E_Manager.attackRange)
+        if (!E_Manager.IfWithinAttackRange())
         {
             E_Manager.TransiteToState(StateType.MoveToPlayer);
         }
     }
 
+}
+
+public class EHitbackState: IState
+{
+    private EnemyStateManager E_Manager;
+    private int patrolPointsCount;
+    public EHitbackState(EnemyStateManager manager, int patrolPointsCount)
+    {
+        this.E_Manager = manager;
+        this.patrolPointsCount = patrolPointsCount;
+    }
+    public void OnEnter()
+    {
+        E_Manager.EnterHitback();
+    }
+    public void OnExit()
+    {
+        E_Manager.StopHitback();
+    }
+    public void OnUpdate()
+    {
+        //If still hitback
+        if (E_Manager.IfHitback())
+        {
+            E_Manager.Hitback();
+            return;
+        }
+
+        //If player is within the attack range, transite to Attack state
+        if (E_Manager.IfWithinAttackRange())
+        {
+            E_Manager.TransiteToState(StateType.Attack);
+            return;
+        }
+        //If player is within the detect range, transite to MoveToPlayer state
+        else if (E_Manager.IfWithinDetectRange())
+        {
+            E_Manager.TransiteToState(StateType.MoveToPlayer);
+            return;
+        }
+        //If player is outside the detect range, transite to Patrol state
+        else if (!E_Manager.IfWithinDetectRange())
+        {
+            if (patrolPointsCount != 0)
+            {
+                E_Manager.TransiteToState(StateType.Patrol);
+                return;
+            }
+            else
+            {
+                E_Manager.TransiteToState(StateType.Idle);
+                return;
+            }
+        }
+    }
+}
+
+public class EDieState: IState
+{
+    private EnemyStateManager E_Manager;
+    public EDieState(EnemyStateManager manager)
+    {
+        this.E_Manager = manager;
+    }
+    public void OnEnter()
+    {
+        E_Manager.EnemyDead();
+    }
+    public void OnExit()
+    {
+        Debug.Log("I'm dead");
+    }
+    public void OnUpdate()
+    {
+        //Do nothing
+    }
 }

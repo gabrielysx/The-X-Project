@@ -11,7 +11,7 @@ public interface IState
 }
 public enum StateType
 {
-    Idle, Patrol, Attack, MoveToPlayer, Move
+    Idle, Patrol, Attack, MoveToPlayer, Move, Hitback, Die
 }
 
 public class FSM_Manager : MonoBehaviour

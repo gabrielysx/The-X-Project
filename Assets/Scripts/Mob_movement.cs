@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Schema;
 using UnityEngine;
 
-public class Mob_movement : MonoBehaviour
+public class Mob_Movement : MonoBehaviour
 {
     private Rigidbody2D rb;
     private bool moving;
@@ -24,7 +24,7 @@ public class Mob_movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
