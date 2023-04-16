@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8192269414125755553}
   - component: {fileID: 5704780383603622395}
   - component: {fileID: 5704780383603622392}
+  - component: {fileID: 5637656766605155729}
   - component: {fileID: 5704780383603622397}
   m_Layer: 0
   m_Name: mob_1
@@ -133,7 +134,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 1
   m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -141,6 +142,26 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &5637656766605155729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5704780383603622375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f9c880515f801d41867a2133c90e8ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPatrolPointIndex: 0
+  nextTargetPosition: {x: 0, y: 0}
+  patrolPoints: []
+  detectRange: 3
+  attackRange: 1
+  baseHP: 50
+  baseSpeed: 3
+  DisThreshold: 0.1
 --- !u!114 &5704780383603622397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,10 +174,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 040d126feada567488cad98f55884a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStateType: 0
-  detectRange: 4
-  attackRange: 2
-  patrolPoints: []
-  baseHP: 0
-  baseSpeed: 5
-  DisThreshold: 0.1

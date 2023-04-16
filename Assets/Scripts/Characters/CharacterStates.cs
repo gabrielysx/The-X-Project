@@ -1,12 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class PIdleState : IState
 {
     private CharacterStateManager P_Manager;
+    private Character characterController;
 
-    public PIdleState(CharacterStateManager manager) { this.P_Manager = manager; }
+    public PIdleState(CharacterStateManager manager,Character cc) 
+    { 
+        this.P_Manager = manager;
+        this.characterController = cc;
+    }
 
     public void OnEnter()
     {
@@ -19,18 +25,32 @@ public class PIdleState : IState
     }
     public void OnUpdate()
     {
-        float y = Input.GetAxis("Vertical");
-        float x = Input.GetAxis("Horizontal");
-        if (y != 0 || x != 0)
+        //Do nothing
+        
+    }
+    public StateType ExitConditions()
+    {
+        if(characterController.IfMoving())
         {
-            P_Manager.TransiteToState(StateType.Move);
+            return StateType.Move;
         }
+        else
+        {
+            //Stay in Idle state
+            return StateType.Idle;
+        }
+        
     }
 }
 public class PMoveState : IState
 {
     private CharacterStateManager P_Manager;
-    public PMoveState(CharacterStateManager manager) { this.P_Manager = manager; }
+    private Character characterController;
+    public PMoveState(CharacterStateManager manager, Character cc)
+    {
+        this.P_Manager = manager;
+        this.characterController = cc;
+    }
     public void OnEnter()
     {
         Debug.LogWarning("Start Moving");
@@ -41,17 +61,23 @@ public class PMoveState : IState
     }
     public void OnUpdate()
     {
-        float y = Input.GetAxis("Vertical");
-        float x = Input.GetAxis("Horizontal");
-        if (y != 0 || x != 0)
+
+        characterController.MoveToTargetPoint();
+    }
+
+    public StateType ExitConditions()
+    {
+        if (characterController.IfMoving())
         {
-            P_Manager.MoveToTargetPoint(new Vector2(x, y));
+            //Stay in Move state
+            return StateType.Move;
         }
         else
         {
-            P_Manager.TransiteToState(StateType.Idle);
+            return StateType.Idle;
         }
     }
+
 }
 
 

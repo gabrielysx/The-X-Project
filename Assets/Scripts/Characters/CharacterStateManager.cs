@@ -4,33 +4,30 @@ using UnityEngine;
 
 public class CharacterStateManager : FSM_Manager
 {
-    //Basic components and variables for the character
-    private Rigidbody2D rb;
-    private int currentHP;
+    private Character characterController;
+    //public Character GetCharacterController()
+    //{
+    //    return characterController;
+    //}
 
-
-    [SerializeField] private int baseHP;
-    [SerializeField] private float baseSpeed;
-
-    protected override void Other_Init()
+    private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        currentHP = baseHP;
+        characterController = GetComponent<Character>();
+        currentState = SwitchBetweenStates(StateType.Idle);
     }
 
-    protected override void Init_States()
+    protected override IState SwitchBetweenStates(StateType typeName)
     {
-        states = new Dictionary<StateType, IState>();
-        states.Add(StateType.Idle, new PIdleState(this));
-        states.Add(StateType.Move, new PMoveState(this));
-        currentStateType= StateType.Idle;
-        currentState = states[StateType.Idle];
+        switch (typeName)
+        {
+            case StateType.Idle:
+                return new PIdleState(this,characterController);
+            case StateType.Move:
+                return new PMoveState(this, characterController);
+            default:
+                return new PIdleState(this, characterController);
+        }
     }
-    public void MoveToTargetPoint(Vector2 dir)
-    {
-        Vector2 pos = gameObject.transform.position;
-        pos += dir.normalized * baseSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(pos);
 
-    }
+
 }

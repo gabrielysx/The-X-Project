@@ -10,9 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1825411565133600055}
   - component: {fileID: 1825411565133600040}
+  - component: {fileID: 810262485450404788}
   - component: {fileID: 1825411565133600041}
   - component: {fileID: 1825411565133600042}
   - component: {fileID: 8017611206635382150}
+  - component: {fileID: 3626118303190065}
   - component: {fileID: 1825411565133600054}
   m_Layer: 0
   m_Name: Main Character
@@ -88,6 +90,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!70 &810262485450404788
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825411565133600044}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.0013353527, y: 0}
+  m_Size: {x: 0.7890262, y: 1}
+  m_Direction: 0
 --- !u!70 &1825411565133600041
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -101,9 +119,9 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.24}
-  m_Size: {x: 0.4024868, y: 0.6156735}
-  m_Direction: 0
+  m_Offset: {x: 0.0033525957, y: -0.39253968}
+  m_Size: {x: 0.7095448, y: 0.17649318}
+  m_Direction: 1
 --- !u!50 &1825411565133600042
 Rigidbody2D:
   serializedVersion: 4
@@ -139,7 +157,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 7988034287481646681, guid: e172700a597c84d428a1fdeb59385460, type: 3}
   cam: {fileID: 0}
-  firingRate: 0
+  firingRate: 5
+--- !u!114 &3626118303190065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825411565133600044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e444c025671c4614d80bdafdb687160b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseHP: 50
+  baseSpeed: 5
 --- !u!114 &1825411565133600054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +184,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63fcc71b01e2c26498bf7b4679a209dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStateType: 0
-  baseHP: 0
-  baseSpeed: 10

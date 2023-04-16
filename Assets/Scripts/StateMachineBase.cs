@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 
@@ -8,67 +9,86 @@ public interface IState
     void OnEnter();
     void OnUpdate();
     void OnExit();
+    StateType ExitConditions();
 }
 public enum StateType
 {
     Idle, Patrol, Attack, MoveToPlayer, Move, Hitback, Die
 }
 
+public class DefaultIdle : IState
+{
+    public void OnEnter()
+    {
+
+    }
+
+    public void OnExit()
+    {
+
+    }
+
+    public void OnUpdate()
+    {
+
+    }
+
+    public StateType ExitConditions()
+    {
+        return StateType.Idle;
+    }
+}
+
 public class FSM_Manager : MonoBehaviour
 {
-    public IState currentState;
-    //public List<IState> states;
-    public StateType currentStateType;
-    public Dictionary<StateType, IState> states = new Dictionary<StateType, IState>();
+    protected IState currentState;
+    private StateType curStateType,nextStateType;
 
-    protected virtual void Start()
-    {
-        Init_States();
-        Other_Init();
-    }
 
     protected virtual void Update()
     {
-        currentState.OnUpdate();
+        RunCurrentState();
     }
-
-    protected virtual void Init_States()
-    {
-        //Add all the states needed here
-    }
-
-    protected virtual void Other_Init()
-    {
-        //Add all other actions that needed in Start() phase
-    }
-
 
     /// <summary>
     /// The base method to transite to specified state
     /// </summary>
-    /// <param name="newState">specified state</param>
-    public virtual void TransiteToState(StateType stateType)
+    /// <param name="NewState">specified state</param>
+    public virtual void ChangeState(StateType newStateType)
     {
-        if (currentState != null)
+        nextStateType = newStateType;
+    }
+
+    private void RunCurrentState()
+    {
+        if(nextStateType != curStateType)
         {
             currentState.OnExit();
-            if (states.ContainsKey(stateType) == false)
-            {
-                Debug.LogError("The state type is not in the dictionary");
-                //Reenter the current state
-                currentState.OnEnter();
-                return;
-            }
+            curStateType = nextStateType;
+            currentState = SwitchBetweenStates(curStateType);
+            currentState.OnEnter();
+        }
+
+        nextStateType = currentState.ExitConditions();
+
+        if (nextStateType != curStateType)
+        {
+            return;
         }
         else
         {
-            Debug.LogError("No valid current state");
-            return;
+            currentState.OnUpdate();
         }
-        
-        currentStateType = stateType;
-        currentState = states[stateType];
-        currentState.OnEnter();
+    }
+
+   protected virtual IState SwitchBetweenStates(StateType typeName)
+    {
+        //Switch the state
+        switch (typeName)
+        {
+            default:
+                return new DefaultIdle();
+        }
     }
 
 }
