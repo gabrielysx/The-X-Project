@@ -21,6 +21,7 @@ public class ProjectileBase : MonoBehaviour
         {
             Debug.Log("Hit!");
             GameObject.Destroy(transform.gameObject);
+            this.transform.GetComponent<Collider2D>().enabled = false;
         }
 
     }

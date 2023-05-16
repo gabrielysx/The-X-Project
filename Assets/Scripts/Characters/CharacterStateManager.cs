@@ -24,6 +24,8 @@ public class CharacterStateManager : FSM_Manager
                 return new PIdleState(this,characterController);
             case StateType.Move:
                 return new PMoveState(this, characterController);
+            case StateType.Dash:
+                return new PDashState(this, characterController);
             default:
                 return new PIdleState(this, characterController);
         }

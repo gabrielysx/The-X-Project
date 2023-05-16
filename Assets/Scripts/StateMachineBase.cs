@@ -13,7 +13,7 @@ public interface IState
 }
 public enum StateType
 {
-    Idle, Patrol, Attack, MoveToPlayer, Move, Hitback, Die
+    Idle, Patrol, Attack, MoveToPlayer, Move, Hitback, Die, Dash, Flee
 }
 
 public class DefaultIdle : IState
@@ -45,9 +45,14 @@ public class FSM_Manager : MonoBehaviour
     private StateType curStateType,nextStateType;
 
 
-    protected virtual void Update()
+    protected virtual void FixedUpdate()
     {
         RunCurrentState();
+    }
+
+    protected virtual void Update()
+    {
+        
     }
 
     /// <summary>
@@ -59,8 +64,9 @@ public class FSM_Manager : MonoBehaviour
         nextStateType = newStateType;
     }
 
-    private void RunCurrentState()
+    protected void RunCurrentState()
     {
+        //When state changed, exit current state and enter new state
         if(nextStateType != curStateType)
         {
             currentState.OnExit();
@@ -69,6 +75,7 @@ public class FSM_Manager : MonoBehaviour
             currentState.OnEnter();
         }
 
+        //Check the state conditions and get the next state
         nextStateType = currentState.ExitConditions();
 
         if (nextStateType != curStateType)

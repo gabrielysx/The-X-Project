@@ -25,10 +25,14 @@ public class PlayerAttackManager : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, slashRange);
         Vector3 pos = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = pos - transform.position;
-        Vector2 temp = Quaternion.AngleAxis(slashAngle / 2, Vector3.forward) * dir;
-        Gizmos.DrawLine(transform.position, transform.position + (Vector3)temp * slashRange);
-        temp = Quaternion.AngleAxis(-slashAngle / 2, Vector3.forward) * dir;
-        Gizmos.DrawLine(transform.position, transform.position + (Vector3)temp * slashRange);
+        Vector3 temp = Quaternion.AngleAxis(slashAngle / 2, Vector3.forward) * dir.normalized;
+        temp = temp * slashRange + transform.position;
+        Gizmos.DrawLine(transform.position, new Vector3(temp.x,temp.y,transform.position.z));
+        temp = Quaternion.AngleAxis(-slashAngle / 2, Vector3.forward) * dir.normalized;
+        temp = temp * slashRange + transform.position;
+        Gizmos.DrawLine(transform.position, new Vector3(temp.x, temp.y, transform.position.z));
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, 5);
     }
 
     // Start is called before the first frame update
@@ -128,7 +132,7 @@ public class PlayerAttackManager : MonoBehaviour
                 Vector3 spawnPos = dir.normalized * slashRange * 0.75f;
                 spawnPos += transform.position;
                 GameObject slash = Instantiate(slashPrefab, spawnPos, rot);
-                slash.transform.localScale = new Vector3(slashRange, slashRange, 1f);
+                slash.transform.localScale = new Vector3(slashRange * 0.9f, slashRange * 0.75f, 1f);
 
                 //Judge if there is anything being slashed
                 SlashJudgment(dir);
@@ -173,7 +177,7 @@ public class PlayerAttackManager : MonoBehaviour
             Enemy hittedEnemy = hittedObject.GetComponent<Enemy>();
             if (hittedEnemy != null)
             {
-                hittedEnemy.TakeHit(atk_dir, 10f, 0.2f);
+                hittedEnemy.TakeHit(atk_dir, 10f, 0.2f, 0.1f);
             }
         }
 

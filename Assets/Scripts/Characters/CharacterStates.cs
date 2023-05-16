@@ -80,4 +80,39 @@ public class PMoveState : IState
 
 }
 
+public class PDashState: IState
+{
+    private CharacterStateManager P_Manager;
+    private Character characterController;
+    public PDashState(CharacterStateManager manager, Character cc)
+    {
+        this.P_Manager = manager;
+        this.characterController = cc;
+    }
+    public void OnEnter()
+    {
+        characterController.EnterDash();
+    }
+    public void OnExit()
+    {
+        Debug.LogWarning("Stop Dashing");
+    }
+    public void OnUpdate()
+    {
+        characterController.Dash();
+    }
+    public StateType ExitConditions()
+    {
+        if (characterController.IfDashing())
+        {
+            //Stay in Move state
+            return StateType.Dash;
+        }
+        else
+        {
+            return StateType.Idle;
+        }
+    }
+}
+
 

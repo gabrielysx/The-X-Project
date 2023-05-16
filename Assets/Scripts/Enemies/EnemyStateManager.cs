@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStateManager : FSM_Manager
+public sealed class EnemyStateManager : FSM_Manager
 {
     private Enemy enemyController;
     //public Enemy GetEnemyController() { return enemyController; };
@@ -29,6 +29,8 @@ public class EnemyStateManager : FSM_Manager
                 return new EHitbackState(this, enemyController);
             case StateType.Die:
                 return new EDieState(this, enemyController);
+            case StateType.Flee:
+                return new EFleeState(this, enemyController);
             default:
                 return new EIdleState(this, enemyController);
         }

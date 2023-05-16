@@ -7,13 +7,13 @@ using UnityEngine.UI;
 
 public class EIdleState : IState
 {
-    private EnemyStateManager E_Manager;
-    private Enemy enemyController;
+    protected FSM_Manager E_Manager;
+    protected Enemy enemyController;
 
-    public EIdleState(EnemyStateManager manager, Enemy ec)
+    public EIdleState(FSM_Manager manager, Enemy ec)
     {
-        this.E_Manager = manager;
-        this.enemyController = ec;
+        E_Manager = manager;
+        enemyController = ec;
     }
 
     public void OnEnter()
@@ -61,10 +61,10 @@ public class EIdleState : IState
 
 public class EPatrolState : IState
 {
-    private EnemyStateManager E_Manager;
+    private FSM_Manager E_Manager;
     private Enemy enemyController;
 
-    public EPatrolState(EnemyStateManager manager, Enemy enemyController)
+    public EPatrolState(FSM_Manager manager, Enemy enemyController)
     {
         this.E_Manager = manager;
         this.enemyController = enemyController;
@@ -73,11 +73,13 @@ public class EPatrolState : IState
     public void OnEnter()
     {
         enemyController.EnterPatrol();
+        enemyController.SetAnimatorMoving(true);
     }
 
     public void OnExit()
     {
         Debug.Log("Exit Patrol State");
+        enemyController.SetAnimatorMoving(false);
     }
 
     public void OnUpdate()
@@ -108,9 +110,9 @@ public class EPatrolState : IState
 
 public class EMoveToPlayerState: IState
 {
-    private EnemyStateManager E_Manager;
+    private FSM_Manager E_Manager;
     private Enemy enemyController;
-    public EMoveToPlayerState(EnemyStateManager manager, Enemy ec)
+    public EMoveToPlayerState(FSM_Manager manager, Enemy ec)
     {
         this.E_Manager = manager;
         this.enemyController= ec;
@@ -118,10 +120,12 @@ public class EMoveToPlayerState: IState
     public void OnEnter()
     {
         Debug.Log("Player Detected!");
+        enemyController.SetAnimatorMoving(true);
     }
     public void OnExit()
     {
         Debug.Log("Lost the Target :(");
+        enemyController.SetAnimatorMoving(false);
     }
     public void OnUpdate()
     {
@@ -158,9 +162,9 @@ public class EMoveToPlayerState: IState
 
 public class EAttackState: IState
 {
-    private EnemyStateManager E_Manager;
+    private FSM_Manager E_Manager;
     private Enemy enemyController;
-    public EAttackState(EnemyStateManager manager, Enemy enemyController)
+    public EAttackState(FSM_Manager manager, Enemy enemyController)
     {
         this.E_Manager = manager;
         this.enemyController = enemyController;
@@ -180,7 +184,7 @@ public class EAttackState: IState
     }
     public StateType ExitConditions()
     {
-        //If player is within the attack range, transite to MoveToPlayer state
+        //If player is within the attack range, keep attacking
         if (enemyController.IfWithinAttackRange())
         {
             return StateType.Attack;
@@ -200,9 +204,9 @@ public class EAttackState: IState
 
 public class EHitbackState: IState
 {
-    private EnemyStateManager E_Manager;
+    private FSM_Manager E_Manager;
     private Enemy enemyController;
-    public EHitbackState(EnemyStateManager manager,Enemy ec)
+    public EHitbackState(FSM_Manager manager,Enemy ec)
     {
         this.E_Manager = manager;
         this.enemyController= ec;
@@ -226,6 +230,10 @@ public class EHitbackState: IState
         if (enemyController.IfHitback())
         {
             return StateType.Hitback;
+        }
+        else if (enemyController.IfFleeing())
+        {
+            return StateType.Flee;
         }
         //If player is within the attack range, transite to Attack state
         else if (enemyController.IfWithinAttackRange())
@@ -255,16 +263,17 @@ public class EHitbackState: IState
 
 public class EDieState: IState
 {
-    private EnemyStateManager E_Manager;
+    private FSM_Manager E_Manager;
     private Enemy enemyController;
-    public EDieState(EnemyStateManager manager, Enemy enemyController)
+    public EDieState(FSM_Manager manager, Enemy enemyController)
     {
         this.E_Manager = manager;
         this.enemyController = enemyController;
     }
     public void OnEnter()
     {
-        enemyController.EnemyDead();
+        enemyController.EnterDead(); 
+        Debug.Log("I'm dead");
     }
     public void OnExit()
     {
@@ -279,3 +288,39 @@ public class EDieState: IState
         return StateType.Die;
     }
 }
+
+//Flee State
+public class EFleeState : IState
+{
+    private FSM_Manager E_Manager;
+    private Enemy enemyController;
+
+    public EFleeState(FSM_Manager manager, Enemy enemyController)
+    {
+        this.E_Manager = manager;
+        this.enemyController = enemyController;
+    }
+
+    public StateType ExitConditions()
+    {
+        return StateType.Flee;
+    }
+
+    public void OnEnter()
+    {
+        Debug.Log("Enter Fleeing");
+        enemyController.SetAnimatorMoving(true);
+    }
+
+    public void OnExit()
+    {
+        Debug.Log("Exit Fleeing");
+        enemyController.SetAnimatorMoving(false);
+    }
+
+    public void OnUpdate()
+    {
+        enemyController.FleeAway();
+    }
+}
+

@@ -157,7 +157,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 7988034287481646681, guid: e172700a597c84d428a1fdeb59385460, type: 3}
   cam: {fileID: 0}
-  firingRate: 5
+  firingRate: 2
+  slashRate: 1
+  slashRange: 1
+  slashAngle: 60
+  slashPrefab: {fileID: 7618205437188163439, guid: 3f6e30a9e186da8459476ebc176f1d13, type: 3}
 --- !u!114 &3626118303190065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,6 +174,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e444c025671c4614d80bdafdb687160b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+  ifDashToMousePos: 0
+  dashSpeed: 15
+  dashTime: 0.2
+  dashCooldownTime: 1
   baseHP: 50
   baseSpeed: 5
 --- !u!114 &1825411565133600054
