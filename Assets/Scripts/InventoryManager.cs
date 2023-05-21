@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
-
-public class QuestManager : MonoBehaviour
+public class InventoryManager : MonoBehaviour
 {
-    public static QuestManager instance;
+    public static InventoryManager instance;
 
     private void Awake()
     {
