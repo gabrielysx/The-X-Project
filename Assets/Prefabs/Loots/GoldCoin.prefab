@@ -101,9 +101,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 4164505062743953869}
   collectDistance: 0.5
-  detectDistance: 2
+  detectDistance: 4
   initSpeed: 5
-  collectSpeed: 2
+  collectSpeed: 4
   maxDuration: 1.2
   minDuration: 0.8
   detectStartTime: 1

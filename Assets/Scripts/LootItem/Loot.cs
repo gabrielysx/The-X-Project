@@ -68,7 +68,7 @@ public class Loot : MonoBehaviour
         if(isCollecting)
         {
             Vector2 dir = player.position - transform.position;
-            rb.MovePosition((Vector2)transform.position + dir.normalized * curSpeed * Time.fixedDeltaTime);
+            rb.MovePosition((Vector2)transform.position + dir.normalized * collectSpeed * Time.fixedDeltaTime);
             //when reach the player, being collected to the inventory
             if(Vector2.Distance(player.position, transform.position) < collectDistance)
             {
