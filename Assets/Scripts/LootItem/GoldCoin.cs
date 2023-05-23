@@ -1,24 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
-public class Loot : MonoBehaviour
+public class GoldCoin : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer sr;
     [SerializeField] private Rigidbody2D rb;
-    private LootItem itemInfo;
-    [SerializeField] private int amount;
     [SerializeField] private float collectDistance, detectDistance;
     [SerializeField] private float initSpeed, collectSpeed, maxDuration, minDuration, detectStartTime;
     private float flyDur, timer, curSpeed;
     private Vector2 flyDirection;
     private bool isMoving, isDetecting, isCollecting;
     private Transform player;
-    
 
-    public void SetInitCondition(LootItem item, int n)
+
+    public void SetCoinInitCondition()
     {
         flyDirection = Quaternion.AngleAxis(Random.Range(-180f, 180f), Vector3.forward) * Vector2.up;
         flyDur = Random.Range(minDuration, maxDuration);
@@ -27,9 +22,6 @@ public class Loot : MonoBehaviour
         isMoving = true;
         isDetecting = false;
         isCollecting = false;
-        itemInfo = item;
-        sr.sprite = itemInfo.icon;
-        amount = n;
         player = Character.mainPlayerInstance.transform;
     }
 
@@ -44,17 +36,17 @@ public class Loot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(isMoving)
+        if (isMoving)
         {
             Flying();
         }
-        if(isDetecting)
+        if (isDetecting)
         {
             if (Vector2.Distance(player.position, transform.position) < detectDistance)
             {
@@ -65,17 +57,17 @@ public class Loot : MonoBehaviour
                 GetComponent<Collider2D>().enabled = false;
             }
         }
-        if(isCollecting)
+        if (isCollecting)
         {
             Vector2 dir = player.position - transform.position;
             rb.MovePosition((Vector2)transform.position + dir.normalized * curSpeed * Time.fixedDeltaTime);
             //when reach the player, being collected to the inventory
-            if(Vector2.Distance(player.position, transform.position) < collectDistance)
+            if (Vector2.Distance(player.position, transform.position) < collectDistance)
             {
                 isCollecting = false;
                 isMoving = false;
                 isDetecting = false;
-                InventoryManager.instance.AddLoot(itemInfo.ID, amount);
+                InventoryManager.instance.AddGold(1);
                 DestroySelf();
             }
         }
@@ -93,8 +85,8 @@ public class Loot : MonoBehaviour
             }
             timer += Time.fixedDeltaTime;
         }
-        
-        
+
+
 
     }
 

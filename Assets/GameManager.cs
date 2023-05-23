@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     private float spawnerTimer;
     [SerializeField] private Transform spawnedMobsParent;
     private int curSpawnNumber;
+    public GameObject lootHolder; 
 
     private void Awake()
     {

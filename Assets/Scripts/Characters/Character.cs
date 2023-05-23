@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    public static Character mainPlayerInstance;
     //Basic components and variables for the character
     private CharacterStateManager CSM;
     private Rigidbody2D rb;
@@ -16,6 +17,11 @@ public class Character : MonoBehaviour
     [SerializeField] private float dashSpeed = 10, dashTime = 0.1f, dashCooldownTime = 1f;
     [SerializeField] private int baseHP;
     [SerializeField] private float baseSpeed;
+
+    private void Awake()
+    {
+        mainPlayerInstance = this;
+    }
 
     // Start is called before the first frame update
     void Start()

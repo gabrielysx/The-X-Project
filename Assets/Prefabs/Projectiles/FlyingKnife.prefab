@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2699223222052101193}
   - component: {fileID: -9092237739053517644}
   - component: {fileID: 7493153539955493183}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FlyingKnife
   m_TagString: PlayerBullet
   m_Icon: {fileID: 0}

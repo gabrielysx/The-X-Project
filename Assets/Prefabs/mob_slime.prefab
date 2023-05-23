@@ -112,6 +112,13 @@ MonoBehaviour:
   attackRange: 3
   baseHP: 5
   baseSpeed: 2
+  lootDropsInfo:
+  - {fileID: 11400000, guid: 8b27a7235ba055345ab922c1c9acb69a, type: 2}
+  - {fileID: 11400000, guid: e72354d68980b32409ac65c2d23139cb, type: 2}
+  - {fileID: 11400000, guid: b9bde692fb092d241a5d5ed826416f9b, type: 2}
+  lootDropPrefab: {fileID: 8417702430450443555, guid: 5cc2bf994ea50a84d9b3efd6ce73d400, type: 3}
+  goldCoinPrefab: {fileID: 4164505062743953859, guid: 806fe94c449436b44b4dbe867fe2407a, type: 3}
+  goldDropAmount: 3
   dashSpeed: 10
   dashAimTime: 0.8
   dashTime: 1

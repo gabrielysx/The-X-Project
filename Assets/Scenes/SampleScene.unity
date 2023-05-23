@@ -5369,6 +5369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialoguePanel: {fileID: 1447649443}
   NPC: {fileID: 1457680972}
+  questPanel: {fileID: 0}
 --- !u!1001 &1100001764
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5376,6 +5377,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1253066051}
     m_Modifications:
+    - target: {fileID: 5637656766605155729, guid: afae84d9619260140baa2c202416f03c, type: 3}
+      propertyPath: isFlee
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5637656766605155729, guid: afae84d9619260140baa2c202416f03c, type: 3}
       propertyPath: patrolPoints.Array.size
       value: 5
@@ -6355,17 +6360,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a89785d95359c7499b8a2f548bb3546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPatrolPointIndex: 0
+  animator: {fileID: 0}
+  currentHP: 0
+  isFlee: 0
+  DisThreshold: 0.1
   patrolPoints:
   - {fileID: 46632465}
   - {fileID: 1515567952}
   - {fileID: 46632465}
   - {fileID: 279518319}
+  currentPatrolPointIndex: 0
   detectRange: 3
   attackRange: 2
   baseHP: 10
   baseSpeed: 3.5
-  DisThreshold: 0.1
   dashSpeed: 10
   dashAimTime: 0.4
   dashTime: 0.8

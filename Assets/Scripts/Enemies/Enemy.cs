@@ -42,8 +42,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected int attackRange = 1;
     [SerializeField] protected int baseHP = 5;
     [SerializeField] protected float baseSpeed = 2f;
-    
 
+    //loot drops
+    [SerializeField] protected List<LootItem> lootDropsInfo;
+    [SerializeField] protected GameObject lootDropPrefab;
+    [SerializeField] protected GameObject goldCoinPrefab;
+    [SerializeField] protected int goldDropAmount;
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -128,7 +132,8 @@ public class Enemy : MonoBehaviour
             TakeHit(collision.gameObject.transform.GetComponent<ProjectileBase>().flyDir, 10f, 0.4f, 0.1f);
         }
     }
-
+    
+    //Patrol
     public void EnterPatrol()
     {
         //Special condition
@@ -188,7 +193,8 @@ public class Enemy : MonoBehaviour
         Vector2 nextWaypoint = GetNextWayPoint(nextTargetPosition);
         MoveTowardsTargetPosition(nextWaypoint,baseSpeed);
     }
-
+    
+    //Movement
     public void MoveTowardsTargetPosition(Vector2 targetPos, float speed)
     {
         Vector2 currentPos = gameObject.transform.position;
@@ -212,6 +218,7 @@ public class Enemy : MonoBehaviour
         MoveTowardsTargetPosition(nextWaypoint,baseSpeed);
     }
 
+    //Detection
     public bool IfWithinDetectRange()
     {
         float dis = Vector2.Distance(player.transform.position, transform.position);
@@ -225,6 +232,23 @@ public class Enemy : MonoBehaviour
     }
 
     //Hitback methods
+    public bool IfHitback()
+    {
+        return isHitback;
+    }
+
+    public void TakeHit(Vector2 dir, float force, float duration, float stunDur)
+    {
+        isHitback = true;
+        ESM.ChangeState(StateType.Hitback);
+        hitbackTimer = 0;
+
+        hitbackDir = dir.normalized;
+        hitbackForce = force;
+        hitbackDuration = duration;
+        hitbackStunDur = stunDur;
+        TakeDamage(1);
+    }
     public void EnterHitback()
     {
         Debug.Log("Enter hitback");
@@ -267,6 +291,7 @@ public class Enemy : MonoBehaviour
         Debug.Log("Hitback is over");
     }
 
+    //Dead
     public void EnterDead()
     {
         List<Collider2D> allColliders = gameObject.GetComponents<Collider2D>().ToList();
@@ -276,10 +301,12 @@ public class Enemy : MonoBehaviour
         }
         if (animator != null)
         {
+            SpawnDrops();
             animator.SetTrigger("EnterDie");
         }
         else
         {
+            SpawnDrops();
             EnemyDead();
         }
     }
@@ -289,22 +316,19 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
         Destroy(gameObject);
     }
-    public bool IfHitback()
-    {
-        return isHitback;
-    }
 
-    public void TakeHit(Vector2 dir,float force,float duration, float stunDur)
+    public void SpawnDrops()
     {
-        isHitback = true;
-        ESM.ChangeState(StateType.Hitback);
-        hitbackTimer = 0;
-
-        hitbackDir = dir.normalized;
-        hitbackForce = force;
-        hitbackDuration = duration;
-        hitbackStunDur= stunDur;
-        TakeDamage(1);
+        foreach(LootItem item in lootDropsInfo)
+        {
+           GameObject loot = Instantiate(lootDropPrefab, transform.position, new Quaternion(0, 0, 0, 0), GameManager.instance.lootHolder.transform);
+           loot.GetComponent<Loot>().SetInitCondition(item, 1);
+        }
+        for(int i = 0; i < goldDropAmount; i++)
+        {
+            GameObject coin = Instantiate(goldCoinPrefab, transform.position, new Quaternion(0, 0, 0, 0), GameManager.instance.lootHolder.transform);
+            coin.GetComponent<GoldCoin>().SetCoinInitCondition();
+        }
     }
 
     public void TakeDamage(int damage)
@@ -320,6 +344,8 @@ public class Enemy : MonoBehaviour
             currentHP -= damage;
         }
     }
+
+    //Flee
 
     public bool IfFleeing()
     {
@@ -337,29 +363,8 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public Vector2 GetNextWayPoint(Vector2 targetPos)
-    {
-        List<PathNodeBase> nodes = new List<PathNodeBase>();
-        PathFinder pf = PathFinder.instance;
-        Vector3 start = transform.position;
-        nodes = pf.FindPath(pf.WorldToGridPos(start), pf.WorldToGridPos(targetPos));
-        pathDebug = nodes;
-        if (nodes == null)
-        {
-            Debug.Log("Unreachable position, stay the same position");
-            return start;
-        }
-        else if (nodes.Count == 1)
-        {
-            //Current position is in the same grid of the target position
-            Debug.Log("Reach the same grid, move to target now");
-            return targetPos;
-        }
-        else
-        {
-            return pf.GridToWorldPos(nodes[1].gridPosition);
-        }
-    }
+    
+    //apearance
     public void FaceToDirection(float xValue)
     {
         if (xValue > 0)
@@ -380,6 +385,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    //Navigation
     public Vector2 GetNextFleeWayPoint()
     {
         PathFinder pf = PathFinder.instance;
@@ -397,6 +403,29 @@ public class Enemy : MonoBehaviour
             //Current position is in the same grid of the target position
             Debug.LogWarning("Reach the same grid, move to flee point now");
             return fleepoint;
+        }
+        else
+        {
+            return pf.GridToWorldPos(nodes[1].gridPosition);
+        }
+    }
+    public Vector2 GetNextWayPoint(Vector2 targetPos)
+    {
+        List<PathNodeBase> nodes = new List<PathNodeBase>();
+        PathFinder pf = PathFinder.instance;
+        Vector3 start = transform.position;
+        nodes = pf.FindPath(pf.WorldToGridPos(start), pf.WorldToGridPos(targetPos));
+        pathDebug = nodes;
+        if (nodes == null)
+        {
+            Debug.Log("Unreachable position, stay the same position");
+            return start;
+        }
+        else if (nodes.Count == 1)
+        {
+            //Current position is in the same grid of the target position
+            Debug.Log("Reach the same grid, move to target now");
+            return targetPos;
         }
         else
         {
