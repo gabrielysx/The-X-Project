@@ -7,11 +7,19 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager instance;
+
     [SerializeField] private float inputCDtime = 0.6f;
     private bool inputCooldown;
-    [SerializeField] private GameObject dialoguePanel, NPC, questPanel;
+    [SerializeField] private GameObject questInfoPanel;
+    [SerializeField] private List<GameObject> NPCs;
     private float inputCooldownTimer;
-    [SerializeField] private GameObject inventoryPanel,slotsHolder, slotsPrefab, goldAmountText;
+    [SerializeField] private GameObject inventoryPanel, slotsHolder, slotsPrefab, goldAmountText;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -22,25 +30,30 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (NPC.transform.GetComponent<InteractionFlag>().getFlagofInteractable())
+        foreach(GameObject NPC in NPCs)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            InteractionFlag flag = NPC.transform.GetComponent<InteractionFlag>();
+            if (flag.getFlagofInteractable())
             {
-                dialoguePanel.SetActive(!dialoguePanel.gameObject.activeInHierarchy);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    flag.NPC_DialoguePanel.SetActive(!flag.NPC_DialoguePanel.activeInHierarchy);
+                }
             }
         }
+
         if (!inputCooldown)
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                questPanel.SetActive(!questPanel.gameObject.activeInHierarchy);
+                questInfoPanel.SetActive(!questInfoPanel.gameObject.activeInHierarchy);
                 inputCooldown = true;
                 inputCooldownTimer = 0;
             }
             else if (Input.GetKeyDown(KeyCode.I))
             {
-                inventoryPanel.SetActive(!inventoryPanel.gameObject.activeInHierarchy);
-                if (inventoryPanel.gameObject.activeInHierarchy)
+                inventoryPanel.SetActive(!inventoryPanel.activeInHierarchy);
+                if(inventoryPanel.activeInHierarchy)
                 {
                     UpdateInventorySlots();
                     UpdateGoldAmount();

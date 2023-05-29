@@ -8,6 +8,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     //Basic components and variables for the enemy
+    [SerializeField] protected int enemyTypeID;
     [SerializeField] protected Animator animator;
     protected FSM_Manager ESM;
     protected Rigidbody2D rb;
@@ -133,6 +134,12 @@ public class Enemy : MonoBehaviour
         }
     }
     
+    //Get data
+    public int GetEnemyTypeID()
+    {
+        return enemyTypeID;
+    }
+
     //Patrol
     public void EnterPatrol()
     {

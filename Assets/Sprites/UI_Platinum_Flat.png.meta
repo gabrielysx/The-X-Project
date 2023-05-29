@@ -955,6 +955,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: UI_Platinum_Flat_40
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 254
+        width: 150
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eaa76d7fa9b39f445995267deaca8d52
+      internalID: 53284251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -969,7 +990,7 @@ TextureImporter:
       UI_Platinum_Flat_23: 1092324310
       UI_Platinum_Flat_4: -783237630
       UI_Platinum_Flat_9: -1760613147
-      UI_Platinum_Flat_13: -1160696811
+      UI_Platinum_Flat_27: -1511626213
       UI_Platinum_Flat_32: -616284897
       UI_Platinum_Flat_16: -1663999662
       UI_Platinum_Flat_28: 1881749637
@@ -986,6 +1007,7 @@ TextureImporter:
       UI_Platinum_Flat_24: -1374226017
       UI_Platinum_Flat_1: -315913876
       UI_Platinum_Flat_35: -1116113303
+      UI_Platinum_Flat_40: 53284251
       UI_Platinum_Flat_33: -1503468287
       UI_Platinum_Flat_14: -792454825
       UI_Platinum_Flat_38: -1546105022
@@ -1002,7 +1024,7 @@ TextureImporter:
       UI_Platinum_Flat_30: 1003288099
       UI_Platinum_Flat_25: -1352605557
       UI_Platinum_Flat_36: 942102527
-      UI_Platinum_Flat_27: -1511626213
+      UI_Platinum_Flat_13: -1160696811
       UI_Platinum_Flat_17: -1373999175
       UI_Platinum_Flat_39: -1159313048
       UI_Platinum_Flat_21: 27849916

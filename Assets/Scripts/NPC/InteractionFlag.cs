@@ -5,6 +5,7 @@ using UnityEngine;
 public class InteractionFlag : MonoBehaviour
 {
     private bool flagofInteractable = false;
+    public GameObject NPC_DialoguePanel;
 
     // Start is called before the first frame update
     void Start()

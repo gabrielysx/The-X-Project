@@ -14,7 +14,7 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager instance;
 
-    [SerializeField] private List<LootItem> itemTypes = new List<LootItem>();
+    public List<LootItem> itemTypes = new List<LootItem>();
     public List<BagLoots> loots = new List<BagLoots>();
     public int goldAmount;
 
@@ -31,6 +31,10 @@ public class InventoryManager : MonoBehaviour
             if (loot.typeID == typeID)
             {
                 loot.amount += amount;
+                if(loot.amount <=0)
+                {
+                    loots.Remove(loot);
+                }
                 found = true;
                 break;
             }

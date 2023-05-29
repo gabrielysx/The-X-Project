@@ -45205,6 +45205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f488ade7bbbc3734e806d3ce9b056e4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NPC_DialoguePanel: {fileID: 303592981}
 --- !u!212 &1092078099
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -46766,9 +46767,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputCDtime: 0.15
-  dialoguePanel: {fileID: 303592981}
-  NPC: {fileID: 1092078095}
-  questPanel: {fileID: 126954784}
+  questInfoPanel: {fileID: 0}
+  NPCs:
+  - {fileID: 1092078095}
   inventoryPanel: {fileID: 1233079121}
   slotsHolder: {fileID: 994973349}
   slotsPrefab: {fileID: 1448327341830293681, guid: ec701c954b31de44fa44aa0ec8597556, type: 3}
