@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f741efc3e8f103b4c93e6305584c7e62, type: 3}
   m_Name: QuestRule2
   m_EditorClassIdentifier: 
-  requireItemPool: 
+  requireItemPool: 0000000001000000
   requireEnemyPool: 
-  maxRewardGoldMultiplier: 0
-  minRewardGoldMultiplier: 0
-  questEntryRules: []
+  maxRewardGoldMultiplier: 1.3
+  minRewardGoldMultiplier: 1.2
+  questEntryRules:
+  - actionType: 1
+    maxRequirementAmount: 5
+    minRequirementAmount: 3
+  - actionType: 1
+    maxRequirementAmount: 5
+    minRequirementAmount: 3

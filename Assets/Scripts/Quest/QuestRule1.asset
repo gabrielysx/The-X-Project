@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: QuestRule1
   m_EditorClassIdentifier: 
   requireItemPool: 
-  requireEnemyPool: 
-  questEntryRules: []
-  maxRewardGoldMultiplier: 0
-  minRewardGoldMultiplier: 0
+  requireEnemyPool: 00000000
+  maxRewardGoldMultiplier: 1.15
+  minRewardGoldMultiplier: 1.1
+  questEntryRules:
+  - actionType: 0
+    maxRequirementAmount: 3
+    minRequirementAmount: 5

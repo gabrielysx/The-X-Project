@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: db469f19208ab654fb0ccc76a9f3df86
+guid: 95af52cda4d4b8746b688a4695e6cfcf
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -112,32 +112,23 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UI_Steel_Flat_0
-      rect:
-        serializedVersion: 2
-        x: 164
-        y: 53
-        width: 40
-        height: 39
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4e0d71cf282a7c9468674772e07e3bbf
-      internalID: 1255057846
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UI_Steel_Flat_1
+      name: UI_Wood_Flat_0
       rect:
         serializedVersion: 2
         x: 0
@@ -145,41 +136,41 @@ TextureImporter:
         width: 160
         height: 160
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 13, y: 13, z: 13, w: 13}
+      pivot: {x: 0, y: 0}
+      border: {x: 16, y: 16, z: 16, w: 16}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f8825aa0080d7354d80a9035a79336d9
-      internalID: 510477592
+      spriteID: 604dffd234e2ccc4fbac98c61353d0d7
+      internalID: -30265169
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Steel_Flat_2
+      name: UI_Wood_Flat_1
       rect:
         serializedVersion: 2
-        x: 210
+        x: 211
         y: 66
-        width: 12
+        width: 10
         height: 60
       alignment: 0
       pivot: {x: 0, y: 0}
-      border: {x: 0, y: 10, z: 0, w: 10}
+      border: {x: 0, y: 11, z: 0, w: 11}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 03ef7814098bdfc4f94a5eedecbcd87f
-      internalID: 1714490813
+      spriteID: 31cdb25c031a5f94899b12699d8ac36c
+      internalID: 237905662
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Steel_Flat_3
+      name: UI_Wood_Flat_2
       rect:
         serializedVersion: 2
         x: 210
@@ -188,13 +179,13 @@ TextureImporter:
         height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
-      border: {x: 0, y: 7, z: 0, w: 7}
+      border: {x: 2, y: 2, z: 2, w: 2}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c0417f74b454def43af27f03ded8b742
-      internalID: -1923192635
+      spriteID: 56f551295eafded46978e54320bead08
+      internalID: -1786192776
       vertices: []
       indices: 
       edges: []
@@ -210,10 +201,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      UI_Steel_Flat_3: -1923192635
-      UI_Steel_Flat_0: 1255057846
-      UI_Steel_Flat_2: 1714490813
-      UI_Steel_Flat_1: 510477592
+      UI_Wood_Flat_2: -1786192776
+      UI_Wood_Flat_1: 237905662
+      UI_Wood_Flat_0: -30265169
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

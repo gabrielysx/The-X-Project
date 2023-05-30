@@ -76,6 +76,15 @@ public class Loot : MonoBehaviour
                 isMoving = false;
                 isDetecting = false;
                 InventoryManager.instance.AddLoot(itemInfo.ID, amount);
+                //Send out quest data to process
+                //Generate quest data
+                QuestData questData = new QuestData();
+                questData.actionType = QuestActionType.Collect;
+                questData.QuestTargetID = itemInfo.ID;
+                questData.amountChange = amount;
+                questData.isConsumed = true;
+                //Send out quest data to quest manager
+                QuestManager.instance.UpdateAllQuests(questData);
                 DestroySelf();
             }
         }

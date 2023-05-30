@@ -5,26 +5,44 @@ using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIManager : MonoBehaviour, IObserver
 {
     public static UIManager instance;
 
     [SerializeField] private float inputCDtime = 0.6f;
     private bool inputCooldown;
-    [SerializeField] private GameObject questInfoPanel;
-    [SerializeField] private List<GameObject> NPCs;
     private float inputCooldownTimer;
+
+    //Quest Info
+    [SerializeField] private GameObject questInfoPanel, questSlotPrefab;
+    [SerializeField] private Transform questSlotHolder;
+
+    //Quest Choice
+    [SerializeField] private GameObject questChoicePanel;
+    [SerializeField] private Transform choiceQuestSlotHolder;
+
+    [SerializeField] private List<GameObject> NPCs;
+
+    //inventory panel
     [SerializeField] private GameObject inventoryPanel, slotsHolder, slotsPrefab, goldAmountText;
 
     private void Awake()
     {
+       
         instance = this;
+       
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        QuestManager.instance.AddObserver(this);
+    }
 
+    public void OnNotify()
+    {
+        UpdateQuestInfoPanel();
+        UpdateQuestChoiceList();
     }
 
     // Update is called once per frame
@@ -72,12 +90,20 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void ClearChilds(Transform parent)
+    {
+        if (parent.childCount > 0)
+        {
+            for (int i = 0; i < parent.childCount; i++)
+            {
+                Destroy(parent.GetChild(i).gameObject);
+            }
+        }
+    }
+
     public void UpdateInventorySlots()
     {
-        foreach(Transform child in slotsHolder.transform)
-        {
-            Destroy(child.gameObject);
-        }
+        ClearChilds(slotsHolder.transform);
         foreach(BagLoots loot in InventoryManager.instance.loots)
         {
             
@@ -93,5 +119,34 @@ public class UIManager : MonoBehaviour
     {
         goldAmountText.GetComponent<TMP_Text>().text = InventoryManager.instance.goldAmount.ToString();
     }
+
+    public void UpdateQuestInfoPanel()
+    {
+        List<Quest> qList = QuestManager.instance.questList;
+        //Clear quest slots holder
+        ClearChilds(questSlotHolder);
+        //generate new slots
+        foreach (Quest q in qList)
+        {
+            int i = qList.IndexOf(q);
+            GameObject questSlot = Instantiate(questSlotPrefab, questSlotHolder);
+            questSlot.GetComponent<QuestSlotUIController>().RefreshQuestSlotUI(i, q);
+        }
+    }
+
+    public void UpdateQuestChoiceList()
+    {
+        List<Quest> qList = QuestManager.instance.questChoiceList;
+        //Clear quest slots holder
+        ClearChilds(choiceQuestSlotHolder);
+        //generate new slots
+        foreach (Quest q in qList)
+        {
+            int i = qList.IndexOf(q);
+            GameObject questSlot = Instantiate(questSlotPrefab, choiceQuestSlotHolder);
+            questSlot.GetComponent<QuestSlotUIController>().RefreshQuestSlotUI(i, q);
+        }
+    }
+
 
 }

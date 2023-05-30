@@ -23,6 +23,7 @@ public struct EnemyType
 {
     public int ID;
     public String Name;
+    public int value;
 }
 
 public struct QuestData
@@ -30,7 +31,6 @@ public struct QuestData
     public QuestActionType actionType;
     public int QuestTargetID;
     public int amountChange;
-    public bool rollOver; //will the value roll over to the next quest
     public bool isConsumed; //is the data consumed after use
 }
 
@@ -50,7 +50,7 @@ public class Quest
     public List<QuestEntry> entries;
     public List<int> currentAmount;
     public List<bool> isCompleted;
-
+    public int rewardGold;
     public int UpdateAmount(int amount,int ID)
     {
         currentAmount[ID] += amount;
@@ -77,14 +77,20 @@ public class Quest
         //if all complete, then return true;
         return true;
     }
+
+    public void SetToTargetState(QuestState target)
+    {
+        state = target;
+    }
 }
 
 public class QuestManager : MonoBehaviour,ISubject
 {
     public static QuestManager instance;
     public List<IObserver> observers = new List<IObserver>();
+    [SerializeField] private int maxQuestChoiceNum = 5;
+    public List<Quest> questChoiceList = new List<Quest>();
     public List<Quest> questList = new List<Quest>();
-    public List<Quest> completedQuestList = new List<Quest>();
     [SerializeField] private List<QuestRule> questRules = new List<QuestRule>();
     [SerializeField] private List<EnemyType> enemyTypesList = new List<EnemyType>();
     public void AddObserver(IObserver observer)
@@ -107,25 +113,23 @@ public class QuestManager : MonoBehaviour,ISubject
 
     private void Awake()
     {
-        instance = this;
+        if (instance != null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     private void Start()
     {
-        questList.Add(GenerateNewQuest(questRules[0]));
-    }
-
-    private void UpdateCompletedQuests()
-    {
-        foreach (Quest q in questList)
-        {
-            if(q.state == QuestState.Complete)
-            {
-                completedQuestList.Add(q);
-                questList.Remove(q);
-            }
-        }
-        NotifyObservers();
+        //questList.Add(GenerateNewQuest(questRules[0]));
+        //UIManager.instance.UpdateQuestInfoPanel();
+        RefreshAvailableQuestList();
     }
 
     public void UpdateAllQuests(QuestData questData)
@@ -146,7 +150,7 @@ public class QuestManager : MonoBehaviour,ISubject
                 }
             }
         }
-        UpdateCompletedQuests();
+        NotifyObservers();
     }
 
     public Quest GenerateNewQuest(QuestRule rule)
@@ -162,6 +166,7 @@ public class QuestManager : MonoBehaviour,ISubject
         output.entries = new List<QuestEntry>();
         output.currentAmount = new List<int>();
         output.isCompleted = new List<bool>();
+        int rewardValue = 0;
         //according to the entry rules, generate each entry
         foreach (QuestRuleEntry entryRule in rule.questEntryRules)
         {
@@ -178,6 +183,8 @@ public class QuestManager : MonoBehaviour,ISubject
                 newEntry.QuestTargetID = curEnemyPool[randomIndex];
                 curEnemyPool.RemoveAt(randomIndex);
                 tempString = "Kill " + tempString + " " + enemyTypesList[newEntry.QuestTargetID].Name;
+                //add gold based on the mob value
+                rewardValue += enemyTypesList[newEntry.QuestTargetID].value * newEntry.amountNeeded;
             }
             else if(newEntry.actionType == QuestActionType.Collect && curItemPool.Count > 0)
             {
@@ -185,17 +192,67 @@ public class QuestManager : MonoBehaviour,ISubject
                 newEntry.QuestTargetID = curItemPool[randomi];
                 curItemPool.RemoveAt(randomi);
                 tempString = "Collect " + tempString + " " + InventoryManager.instance.itemTypes[newEntry.QuestTargetID].title;
+                //add gold based on the mob value
+                rewardValue += InventoryManager.instance.itemTypes[newEntry.QuestTargetID].baseValue * newEntry.amountNeeded;
             }
             //set up description
             newEntry.description = tempString;
+
+            //get other rewards based on the entry
 
             //Add this entry to the quest
             output.entries.Add(newEntry);
             output.currentAmount.Add(0);
             output.isCompleted.Add(false);
         }
+        //calculate gold reward
+        float randMultiplier = UnityEngine.Random.Range(rule.minRewardGoldMultiplier, rule.maxRewardGoldMultiplier);
+        output.rewardGold = Mathf.FloorToInt(rewardValue * randMultiplier);
+
+        //generate other rewards
+
 
         return output;
     }
 
+    public void RefreshAvailableQuestList()
+    {
+        questChoiceList.Clear();
+        for(int i =0;i<maxQuestChoiceNum;i++)
+        {
+            int randRule = UnityEngine.Random.Range(0,questRules.Count);
+            Quest newQuest = GenerateNewQuest(questRules[randRule]);
+            questChoiceList.Add(newQuest);
+        }
+        UIManager.instance.UpdateQuestChoiceList();
+    }
+
+    public void SubmitQuest(int index)
+    {
+        Quest targetQuest = questList[index];
+        if(targetQuest.state == QuestState.Complete)
+        {
+            //Add gold reward
+            InventoryManager.instance.AddGold(targetQuest.rewardGold);
+            //Add other reward
+
+            //Remove this quest
+            questList.Remove(targetQuest);
+            //Update the UI
+            NotifyObservers();
+        }
+
+    }
+
+    public void AcceptQuest(int index)
+    {
+        Quest targetQuest = questChoiceList[index];
+        //Add the quest to the list, and active it
+        targetQuest.state = QuestState.Active;
+        questList.Add(targetQuest);
+        //Remove from the choice list
+        questChoiceList.Remove(targetQuest);
+        //Update the UI
+        NotifyObservers();
+    }
 }

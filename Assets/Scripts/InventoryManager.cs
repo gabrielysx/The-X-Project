@@ -14,13 +14,24 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager instance;
 
+    public Sprite GoldIcon;
     public List<LootItem> itemTypes = new List<LootItem>();
     public List<BagLoots> loots = new List<BagLoots>();
     public int goldAmount;
 
     private void Awake()
     {
-        instance = this;
+        if(instance != null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        
     }
 
     public void AddLoot(int typeID,int amount)

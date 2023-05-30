@@ -301,6 +301,16 @@ public class Enemy : MonoBehaviour
     //Dead
     public void EnterDead()
     {
+        //Send out dead information to the quest manager
+        //Generate Quest Data
+        QuestData questData = new QuestData();
+        questData.actionType = QuestActionType.Kill;
+        questData.QuestTargetID = enemyTypeID;
+        questData.amountChange = 1;
+        questData.isConsumed = false;
+        //Send out the quest data
+        QuestManager.instance.UpdateAllQuests(questData);
+
         List<Collider2D> allColliders = gameObject.GetComponents<Collider2D>().ToList();
         foreach (Collider2D col in allColliders)
         {
