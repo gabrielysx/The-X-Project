@@ -15347,34 +15347,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 519420031}
-    - target: {fileID: 3626118303190065, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: baseSpeed
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3626118303190065, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: dashSpeed
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 3626118303190065, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: ifDashToMousePos
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825411565133600042, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: m_Mass
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825411565133600042, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: m_BodyType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825411565133600042, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: m_LinearDrag
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825411565133600042, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: m_UseAutoMass
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1825411565133600044, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
       propertyPath: m_Name
       value: Main Character
@@ -15427,17 +15399,5 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 519420031}
-    - target: {fileID: 8017611206635382150, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: firingRate
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8017611206635382150, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: slashRange
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8017611206635382150, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: slashPrefab
-      value: 
-      objectReference: {fileID: 7618205437188163439, guid: 3f6e30a9e186da8459476ebc176f1d13, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}

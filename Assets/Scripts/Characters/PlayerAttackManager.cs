@@ -82,7 +82,14 @@ public class PlayerAttackManager : MonoBehaviour
                 Quaternion rot = new Quaternion();
                 rot.eulerAngles = new Vector3(0, 0, angle - 90f);
                 GameObject bullet = Instantiate(bulletPrefab, transform.position, rot);
-                bullet.GetComponent<ProjectileBase>().flyDir = dir;
+                if(bullet.GetComponent<ProjectileBase>() == null)
+                {
+                    bullet.GetComponent<BoomerangProjectile>().flyDir = dir;
+                }
+                else
+                {
+                    bullet.GetComponent<ProjectileBase>().flyDir = dir;
+                }
                 shootTimer += Time.deltaTime;
             }
             else if (shootTimer <= (1 / firingRate))
@@ -95,6 +102,8 @@ public class PlayerAttackManager : MonoBehaviour
             }
         }
     }
+
+
 
     private void SlashAttack()
     {
@@ -182,4 +191,8 @@ public class PlayerAttackManager : MonoBehaviour
         }
 
     }
+
+
+
+
 }

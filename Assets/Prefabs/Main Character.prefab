@@ -134,8 +134,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 1
+  m_Mass: 100
+  m_LinearDrag: 1000
   m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: 7f351496e23babf4587ab277db097894, type: 2}
@@ -155,11 +155,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb4bbc49852cbe946804c0cec88f70dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 7988034287481646681, guid: e172700a597c84d428a1fdeb59385460, type: 3}
+  bulletPrefab: {fileID: 3395938962230055736, guid: 53a29e6b18e95584091c9ca7e69d24c1, type: 3}
   cam: {fileID: 0}
-  firingRate: 2
+  firingRate: 1
   slashRate: 1
-  slashRange: 1
+  slashRange: 1.5
   slashAngle: 60
   slashPrefab: {fileID: 7618205437188163439, guid: 3f6e30a9e186da8459476ebc176f1d13, type: 3}
 --- !u!114 &3626118303190065

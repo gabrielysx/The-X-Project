@@ -20,6 +20,12 @@ public class ProjectileBase : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Hit!");
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(1);
+                enemy.TakeHit(flyDir, 5, 0.3f, 0.1f);
+            }
             GameObject.Destroy(transform.gameObject);
             this.transform.GetComponent<Collider2D>().enabled = false;
         }

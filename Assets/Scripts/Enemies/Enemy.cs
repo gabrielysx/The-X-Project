@@ -126,13 +126,6 @@ public class Enemy : MonoBehaviour
 
     }
 
-    protected void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("PlayerBullet"))
-        {
-            TakeHit(collision.gameObject.transform.GetComponent<ProjectileBase>().flyDir, 10f, 0.4f, 0.1f);
-        }
-    }
     
     //Get data
     public int GetEnemyTypeID()

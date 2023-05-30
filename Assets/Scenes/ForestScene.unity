@@ -61564,10 +61564,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3626118303190065, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: cam
-      value: 
-      objectReference: {fileID: 519420031}
     - target: {fileID: 1825411565133600044, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
       propertyPath: m_Name
       value: Main Character
@@ -61615,14 +61611,6 @@ PrefabInstance:
     - target: {fileID: 1825411565133600055, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8017611206635382150, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: cam
-      value: 
-      objectReference: {fileID: 519420031}
-    - target: {fileID: 8017611206635382150, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
-      propertyPath: firingRate
-      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6dd28ffb3d190274e8ae1b38c5efd722, type: 3}
