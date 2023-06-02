@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Village.unity
+    path: Assets/Scenes/CrabCave.unity
     guid: 3b8036c22f74bf34c9bcc58aa8e33975
   - enabled: 1
     path: Assets/Scenes/ForestScene.unity

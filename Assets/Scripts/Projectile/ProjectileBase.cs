@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileBase : MonoBehaviour
+public class ProjectileBase : MonoBehaviour, IProjectile
 {
     public Vector2 flyDir;
     private Rigidbody2D rb;
@@ -17,25 +17,22 @@ public class ProjectileBase : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Debug.Log("Hit!");
-            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(1);
-                enemy.TakeHit(flyDir, 5, 0.3f, 0.1f);
-            }
-            GameObject.Destroy(transform.gameObject);
-            this.transform.GetComponent<Collider2D>().enabled = false;
-        }
-
+        EnemyDetection(collision);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void EnemyDetection(Collider2D collision)
     {
-        
+        if (!collision.gameObject.CompareTag("Enemy")) return;
+        Debug.Log("Hit!");
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.TakeDamage(1);
+            enemy.TakeHit(flyDir, 5, 0.3f, 0.1f);
+        }
+        Destroy(transform.gameObject);
+        transform.GetComponent<Collider2D>().enabled = false;
+
     }
 
     private void FixedUpdate()
@@ -51,5 +48,10 @@ public class ProjectileBase : MonoBehaviour
         {
             GameObject.Destroy(transform.gameObject);
         }
+    }
+
+    public void SetFlyDirection(Vector2 dir)
+    {
+        flyDir = dir;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoomerangProjectile : MonoBehaviour
+public class BoomerangProjectile : MonoBehaviour, IProjectile
 {
     public Vector2 flyDir;
     private Rigidbody2D rb;
@@ -21,12 +21,6 @@ public class BoomerangProjectile : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         curSpeed = speed;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -60,13 +54,7 @@ public class BoomerangProjectile : MonoBehaviour
         rb.MoveRotation(Mathf.Rad2Deg * movementTimer * 10);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void Movement()
+    private void Movement()
     {
         //update timer
         movementTimer += Time.fixedDeltaTime;
@@ -94,4 +82,8 @@ public class BoomerangProjectile : MonoBehaviour
         }
     }
 
+    public void SetFlyDirection(Vector2 dir)
+    {
+        flyDir = dir;
+    }
 }
