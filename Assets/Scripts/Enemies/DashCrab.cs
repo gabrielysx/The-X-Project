@@ -2,24 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DashCrab : Enemy
+public class DashCrab : Enemy, IObserver
 {
-    private bool isDashing;
-    private float dashTimer;
-    private Vector2 dashDirection;
-    [SerializeField] private float dashSpeed, dashAimTime, dashTime, dashEndTime;
-    public bool GetIsDashing() { return isDashing; }
+    private bool isChasing,isEndure,isAngry;
+    private float chaseTimer;
+    private float originalSpeed,pauseSpeed;
+    [SerializeField] private float chaseMaxSpeed, endureTime, stunTime;
+    public bool GetIsChasing() { return isChasing; }
+    public bool GetIsEndure() { return isEndure; }
 
     protected override void Start()
     {
         base.Start();
+        originalSpeed = baseSpeed;
+        if(LevelManager.instance.crabOpinion == Opinion.Hate)
+        {
+            isAngry = true;
+        }
+        else
+        {
+            isAngry = false;
+        }
+        LevelManager.instance.AddObserver(this);
     }
 
     protected override void OnDrawGizmos()
     {
         base.OnDrawGizmos();
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(transform.position, transform.position + (Vector3)dashDirection);
+
     }
 
     // Update is called once per frame
@@ -27,36 +37,120 @@ public class DashCrab : Enemy
     {
         
     }
-
-    public void EnterDash()
+    
+    public void EnterChasing()
     {
-        isDashing = true;
-        dashTimer = 0;
-    }
-
-    public void Dash()
-    {
-        dashTimer += Time.fixedDeltaTime;
-        //Aiming for dash
-        if (dashTimer < dashAimTime)
+        if(!isEndure && !isChasing)
         {
-            rb.velocity = Vector2.zero;
-            dashDirection = (Vector2)(player.transform.position - transform.position);
+            isEndure= true;
+            chaseTimer = 0;
+            isChasing = true;
         }
-        //dashing
-        else if(dashTimer < dashAimTime + dashTime)
+        else if (isEndure && isChasing)
         {
-            rb.MovePosition((Vector2)gameObject.transform.position + dashSpeed * Time.fixedDeltaTime * dashDirection.normalized);
+            baseSpeed = pauseSpeed;
         }
-        //stop dashing and stun for a while
-        else if (dashTimer < dashAimTime + dashTime + dashEndTime)
-        {
-            rb.velocity = Vector2.zero;
-        }
-        //finish dashing
         else
         {
-            isDashing = false;
+            //resume stun 
         }
+    }
+
+    public void OnChasing()
+    {
+        chaseTimer += Time.fixedDeltaTime;
+        if(chaseTimer < endureTime)
+        {
+            //Set color effect
+            float factor = baseSpeed / chaseMaxSpeed;
+            if(factor > 0.8) factor = 0.8f;
+            sr.material.SetFloat("_FlashAmount", factor);
+            sr.material.SetColor("_FlashColor", Color.red);
+
+            float step = (chaseMaxSpeed - originalSpeed) / endureTime * Time.fixedDeltaTime;
+            baseSpeed += step;
+            if(baseSpeed >= chaseMaxSpeed)
+            {
+                baseSpeed = chaseMaxSpeed;
+            }
+            MovetoPlayer();
+        }
+        else if(chaseTimer < endureTime + stunTime)
+        {
+            sr.material.SetColor("_FlashColor", Color.black);
+            isEndure = false;
+            //stunned, stay still
+        }
+        else
+        {
+            //reset
+            sr.material.SetFloat("_FlashAmount", 0);
+            sr.material.SetColor("_FlashColor", Color.white);
+            isChasing = false;
+        }
+    }
+
+    public void ExitChasing()
+    {
+        if(isEndure)
+        {
+            pauseSpeed = baseSpeed;
+        }
+        else
+        {
+            //reset
+            sr.material.SetFloat("_FlashAmount", 0);
+            sr.material.SetColor("_FlashColor", Color.white);
+        }
+        baseSpeed = originalSpeed;
+
+    }
+
+    public override void TakeDamage(int damage)
+    {
+        if(LevelManager.instance.crabOpinion == Opinion.Friendly)
+        {
+            return;
+        }
+        else
+        {
+            isAngry = true;
+            LevelManager.instance.AddCrabHateValue(5);
+            base.TakeDamage(damage);
+        }
+        
+    }
+
+    public override bool IfWithinAttackRange()
+    {
+        if(isAngry)
+        {
+            return base.IfWithinAttackRange();
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public override bool IfWithinDetectRange()
+    {
+        if(isAngry)
+        {
+            return base.IfWithinDetectRange();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool GetIsAngry()
+    {
+        return isAngry;
+    }
+
+    public void OnNotify()
+    {
+        isAngry = true;
     }
 }

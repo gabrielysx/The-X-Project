@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47eeaf94b38609b45a2eda3a28e38fcb, type: 3}
+  m_Name: 5_MediumLifeStone
+  m_EditorClassIdentifier: 
+  ID: 5
+  icon: {fileID: 21300000, guid: a193f1652e492184eb3b92d749a0b0eb, type: 3}
+  title: Medium Life Stone
+  description: 
+  type: 0
+  baseValue: 250
+  isPurchasable: 1
+  statList:
+  - stat: 0
+    value: 3

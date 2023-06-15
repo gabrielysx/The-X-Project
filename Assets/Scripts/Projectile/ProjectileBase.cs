@@ -7,20 +7,21 @@ public class ProjectileBase : MonoBehaviour, IProjectile
     public Vector2 flyDir;
     private Rigidbody2D rb;
     private float timer = 0f;
-    private float MaxExsistTime = 2f;
-    private float Speed = 3f;
+    [SerializeField] private float MaxExsistTime = 2f;
+    [SerializeField] private float Speed = 3f;
 
     void OnEnable()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         EnemyDetection(collision);
+        WallDetection(collision);
     }
 
-    private void EnemyDetection(Collider2D collision)
+    protected void EnemyDetection(Collider2D collision)
     {
         if (!collision.gameObject.CompareTag("Enemy")) return;
         Debug.Log("Hit!");
@@ -33,6 +34,13 @@ public class ProjectileBase : MonoBehaviour, IProjectile
         Destroy(transform.gameObject);
         transform.GetComponent<Collider2D>().enabled = false;
 
+    }
+
+    protected void WallDetection(Collider2D collision)
+    {
+        if (!collision.gameObject.CompareTag("Obstacle")) return;
+        transform.GetComponent<Collider2D>().enabled = false;
+        Destroy(transform.gameObject);
     }
 
     private void FixedUpdate()

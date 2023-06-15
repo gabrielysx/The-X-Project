@@ -14,8 +14,6 @@ GameObject:
   - component: {fileID: 1578485694625534544}
   - component: {fileID: 7988034287481646685}
   - component: {fileID: 2699223222052101193}
-  - component: {fileID: -9092237739053517644}
-  - component: {fileID: 7493153539955493183}
   m_Layer: 10
   m_Name: FlyingKnife
   m_TagString: PlayerBullet
@@ -184,39 +182,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flyDir: {x: 0, y: 0}
---- !u!114 &-9092237739053517644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7988034287481646681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6d0ef3828d33d440abb289d193ba107, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colliders:
-  - {fileID: 1578485694625534544}
-  - {fileID: 7988034287481646680}
-  index: 0
---- !u!95 &7493153539955493183
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7988034287481646681}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5502af4ec82a2d244b60025e92e6b16f, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  MaxExsistTime: 2
+  Speed: 3

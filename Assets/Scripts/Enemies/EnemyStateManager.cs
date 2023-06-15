@@ -26,7 +26,7 @@ public sealed class EnemyStateManager : FSM_Manager
             case StateType.MoveToPlayer:
                 return new EMoveToPlayerState(this, enemyController);
             case StateType.Hitback:
-                return new EHitbackState(this, enemyController);
+                return new EEnemyHitbackState(this, enemyController);
             case StateType.Die:
                 return new EDieState(this, enemyController);
             case StateType.Flee:
@@ -36,4 +36,14 @@ public sealed class EnemyStateManager : FSM_Manager
         }
 
     }
+}
+
+public class EEnemyHitbackState : EHitbackState<Enemy>
+{
+    public EEnemyHitbackState(FSM_Manager manager, Enemy ec)
+    {
+        E_Manager = manager;
+        enemyController = ec;
+    }
+
 }

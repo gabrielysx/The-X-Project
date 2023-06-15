@@ -92,6 +92,10 @@ public class Character : MonoBehaviour
         }
     }
 
+    public Camera GetMainCamera()
+    {
+        return cam;
+    }
     public void MoveToTargetPoint()
     {
         Vector2 dir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));

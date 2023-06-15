@@ -202,15 +202,11 @@ public class EAttackState: IState
 
 }
 
-public class EHitbackState: IState
+public abstract class EHitbackState<T> : IState where T: Enemy
 {
-    private FSM_Manager E_Manager;
-    private Enemy enemyController;
-    public EHitbackState(FSM_Manager manager,Enemy ec)
-    {
-        this.E_Manager = manager;
-        this.enemyController= ec;
-    }
+    protected FSM_Manager E_Manager;
+    protected T enemyController;
+    
     public void OnEnter()
     {
         enemyController.EnterHitback();
@@ -224,7 +220,7 @@ public class EHitbackState: IState
         enemyController.Hitback();
     }
 
-    public StateType ExitConditions()
+    public virtual StateType ExitConditions()
     {
         //If still hitback
         if (enemyController.IfHitback())

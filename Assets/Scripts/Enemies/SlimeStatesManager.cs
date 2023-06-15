@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlimeStatesManager : FSM_Manager
+public sealed class SlimeStatesManager : FSM_Manager
 {
     private Slime slimeController;
     private void Start()
@@ -23,7 +23,7 @@ public class SlimeStatesManager : FSM_Manager
             case StateType.MoveToPlayer:
                 return new EMoveToPlayerState(this, slimeController);
             case StateType.Hitback:
-                return new EHitbackState(this, slimeController);
+                return new ESlimeHitbackState(this, slimeController);
             case StateType.Die:
                 return new EDieState(this, slimeController);
             default:
@@ -68,7 +68,17 @@ public class ESlimeDashState : IState
     }
 }
 
-public class ESlimeIdleState: IState
+public class ESlimeHitbackState : EHitbackState<Slime>
+{
+    public ESlimeHitbackState(FSM_Manager manager, Slime slimeController)
+    {
+        E_Manager= manager;
+        enemyController = slimeController;
+    }
+
+}
+
+public class ESlimeIdleState : IState
 {
     protected FSM_Manager E_Manager;
     protected Slime enemyController;
@@ -113,7 +123,7 @@ public class ESlimeIdleState: IState
         {
             return StateType.Patrol;
         }
-        
+
     }
 }
 
@@ -158,7 +168,7 @@ public class ESlimeRandomMoveState : IState
             return StateType.MoveToPlayer;
         }
         //Otherwise continuing patrol automaticly
-        else if(slimeController.GetIsRandomMoving())
+        else if (slimeController.GetIsRandomMoving())
         {
             return StateType.Patrol;
         }

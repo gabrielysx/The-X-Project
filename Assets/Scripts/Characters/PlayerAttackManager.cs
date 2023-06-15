@@ -7,185 +7,206 @@ using UnityEngine;
 
 public class PlayerAttackManager : MonoBehaviour
 {
-    [SerializeField] private GameObject bulletPrefab;
-    //private GameObject bulletHolder;
-    private bool isShootFiring, isSlashAttacking;
-    [SerializeField] private Camera cam;
-    [SerializeField] private float firingRate = 2f;
-    [SerializeField] private float slashRate = 1f;
+    //Weapon List
+    [SerializeField] private List<GameObject> bulletPrefabs;
+    [SerializeField] private List<GameObject> weapons;
+
+    //Other weapon configurations
     [SerializeField] private float slashRange = 1f;
     [SerializeField] private float slashAngle = 60f;
     [SerializeField] private GameObject slashPrefab;
-    private float shootTimer, slashTimer;
+    [SerializeField] private float multiSpreadAngle;
+    
+    //Weapon Slot
+    [SerializeField] private GameObject leftSlot,rightSlot;
+    private bool isLeftSlotEmpty, isRightSlotEmpty;
+    private int leftWeaponID, rightWeaponID;
 
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, slashRange);
-        Vector3 pos = cam.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 dir = pos - transform.position;
-        Vector3 temp = Quaternion.AngleAxis(slashAngle / 2, Vector3.forward) * dir.normalized;
-        temp = temp * slashRange + transform.position;
-        Gizmos.DrawLine(transform.position, new Vector3(temp.x,temp.y,transform.position.z));
-        temp = Quaternion.AngleAxis(-slashAngle / 2, Vector3.forward) * dir.normalized;
-        temp = temp * slashRange + transform.position;
-        Gizmos.DrawLine(transform.position, new Vector3(temp.x, temp.y, transform.position.z));
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, 5);
-    }
+    //Attack variables
+    private bool isLeftFiring, isRightFIring;
+    [SerializeField] private Camera cam;
+    [SerializeField] private float curLeftRate = 2f;
+    [SerializeField] private float curRightRate = 1f;
+    private float leftTimer, rightTimer;
 
     // Start is called before the first frame update
     void Start()
     {
         //bulletHolder = GameObject.Find("BulletHolder");
-        cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        if(leftSlot == null)
+        {
+            leftSlot = transform.GetChild(0).gameObject;
+        }
+        if (rightSlot == null)
+        {
+            rightSlot = transform.GetChild(1).gameObject;
+        }
+        isLeftSlotEmpty = true;
+        isRightSlotEmpty = true;
+        LeftSlotUpdate(InventoryManager.instance.leftWeapon);
+        RightSlotUpdate(InventoryManager.instance.rightWeapon);
+        cam = Character.mainPlayerInstance.GetMainCamera();
     }
 
     // Update is called once per frame
     void Update()
     {
-        ShootBullets();
-        SlashAttack();
+        LeftAttack();
+        RightAttack();
     }
 
-    private void ShootBullets()
+    private void LeftAttack()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            isShootFiring = true;
+            isLeftFiring = true;
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            isShootFiring = false;
+            isLeftFiring = false;
         }
 
-        if (!isShootFiring)
+        if (!isLeftFiring)
         {
-            if (shootTimer > 0f)
+            if (leftTimer > 0f)
             {
-                shootTimer += Time.deltaTime;
-                if (shootTimer > (1 / firingRate))
+                leftTimer += Time.deltaTime;
+                if (leftTimer > (1 / curLeftRate))
                 {
-                    shootTimer = 0f;
+                    leftTimer = 0f;
                 }
             }
         }
         else
         {
 
-            if (shootTimer == 0f)
+            if (leftTimer == 0f)
             {
+                //Get mouse position and direction
                 Vector3 pos = cam.ScreenToWorldPoint(Input.mousePosition);
                 Vector2 dir = pos - transform.position;
-                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                Quaternion rot = new Quaternion();
-                rot.eulerAngles = new Vector3(0, 0, angle - 90f);
-                GameObject bullet = Instantiate(bulletPrefab, transform.position, rot);
-                bullet.GetComponent<IProjectile>().SetFlyDirection(dir);
-                shootTimer += Time.deltaTime;
+
+                //Shot the specific weapon in the left slot
+                leftSlot.transform.GetChild(0).GetComponent<IWeaponHandler>().Fire(dir,transform.position);
+
+                //Update Timer
+                leftTimer += Time.deltaTime;
             }
-            else if (shootTimer <= (1 / firingRate))
+            else if (leftTimer <= (1 / curLeftRate))
             {
-                shootTimer += Time.deltaTime;
+                leftTimer += Time.deltaTime;
             }
             else
             {
-                shootTimer = 0f;
+                leftTimer = 0f;
             }
         }
     }
 
-
-
-    private void SlashAttack()
+    private void RightAttack()
     {
         if (Input.GetMouseButtonDown(1))
         {
-            isSlashAttacking = true;
+            isRightFIring = true;
         }
         else if (Input.GetMouseButtonUp(1))
         {
-            isSlashAttacking = false;
+            isRightFIring = false;
         }
 
-        if (!isSlashAttacking)
+        if (!isRightFIring)
         {
-            if (slashTimer > 0f)
+            if (rightTimer > 0f)
             {
-                slashTimer += Time.deltaTime;
-                if (slashTimer > (1 / slashRate))
+                rightTimer += Time.deltaTime;
+                if (rightTimer > (1 / curRightRate))
                 {
-                    slashTimer = 0f;
+                    rightTimer = 0f;
                 }
             }
         }
         else
         {
 
-            if (slashTimer == 0f)
+            if (rightTimer == 0f)
             {
-                //Generate Slash effect
+                //Get mouse position and direction
                 Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
                 Vector2 dir = mousePos - transform.position;
-                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                Quaternion rot = new Quaternion();
-                rot.eulerAngles = new Vector3(0, 0, angle);
-                Vector3 spawnPos = dir.normalized * slashRange * 0.75f;
-                spawnPos += transform.position;
-                GameObject slash = Instantiate(slashPrefab, spawnPos, rot);
-                slash.transform.localScale = new Vector3(slashRange * 0.9f, slashRange * 0.75f, 1f);
 
-                //Judge if there is anything being slashed
-                SlashJudgment(dir);
+                //Shot the specific weapon in the right slot
+                rightSlot.transform.GetChild(0).GetComponent<IWeaponHandler>().Fire(dir, transform.position);
+
                 //Set up timer
-                slashTimer += Time.deltaTime;
+                rightTimer += Time.deltaTime;
             }
-            else if (slashTimer <= (1 / slashRate))
+            else if (rightTimer <= (1 / curRightRate))
             {
-                slashTimer += Time.deltaTime;
+                rightTimer += Time.deltaTime;
             }
             else
             {
-                slashTimer = 0f;
+                rightTimer = 0f;
             }
         }
 
     }
 
-    public void SlashJudgment(Vector2 attackDir)
+    public void LeftSlotUpdate(int newID)
     {
-        List<GameObject> slashed_objects = new List<GameObject>();
-        List<Collider2D> tmp_colliders = Physics2D.OverlapCircleAll(transform.position, slashRange, LayerMask.GetMask("Enemy")).ToList();
-
-        foreach (Collider2D hitbox in tmp_colliders)
+        if (newID == -1)
         {
-            GameObject temp = hitbox.transform.gameObject;
-            if (slashed_objects.Contains(temp) == false)
-            {
-                Vector2 enemyDir = temp.transform.position - transform.position;
-                float tmp_angle = Mathf.Acos(Vector2.Dot(enemyDir.normalized, attackDir.normalized)) * Mathf.Rad2Deg;
-                if (tmp_angle <= slashAngle / 2)
-                {
-                    slashed_objects.Add(temp);
-                }
-            }
+            isLeftSlotEmpty = true;
         }
-
-        foreach (GameObject hittedObject in slashed_objects)
+        else
         {
-            //slash those things
-            Vector2 atk_dir = hittedObject.transform.position - transform.position;
-            Enemy hittedEnemy = hittedObject.GetComponent<Enemy>();
-            if (hittedEnemy != null)
-            {
-                hittedEnemy.TakeHit(atk_dir, 10f, 0.2f, 0.1f);
-            }
+            isLeftSlotEmpty = false;
+            leftWeaponID = newID;
         }
-
+        LeftSlotInitialize();
     }
 
+    public void RightSlotUpdate(int newID)
+    {
+        if (newID == -1)
+        {
+            isRightSlotEmpty = true;
+        }
+        else
+        {
+            isRightSlotEmpty = false;
+            rightWeaponID = newID;
+        }
+        RightSlotInitialize();
+    }
 
+    private void LeftSlotInitialize()
+    {
+        if(isLeftSlotEmpty)
+        {
+            leftWeaponID = 0;
+        }
+        if(leftSlot.transform.childCount > 0)
+        {
+            Destroy(leftSlot.transform.GetChild(0).gameObject);
+        }
+        GameObject newWeapon = Instantiate(weapons[leftWeaponID],leftSlot.transform);
+        curLeftRate = newWeapon.GetComponent<IWeaponHandler>().GetFireRate();
+    }
 
-
+    private void RightSlotInitialize()
+    {
+        if(isRightSlotEmpty)
+        {
+            rightWeaponID = 1;
+        }
+        if(rightSlot.transform.childCount > 0)
+        {
+            Destroy(rightSlot.transform.GetChild(0).gameObject);
+        }
+        GameObject newWeapon = Instantiate(weapons[rightWeaponID], rightSlot.transform);
+        curRightRate = newWeapon.GetComponent<IWeaponHandler>().GetFireRate();
+    }
 }
+
+

@@ -6,9 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/CrabCave.unity
-    guid: 3b8036c22f74bf34c9bcc58aa8e33975
+    path: Assets/Scenes/Village.unity
+    guid: e61a34ccd20fd7d469411010ee358692
   - enabled: 1
     path: Assets/Scenes/ForestScene.unity
     guid: 9baf86abb3b48a94bb7e07e4f4d57d35
+  - enabled: 1
+    path: Assets/Scenes/CrabCave.unity
+    guid: 3b8036c22f74bf34c9bcc58aa8e33975
+  - enabled: 1
+    path: Assets/Scenes/VampireCamp.unity
+    guid: f1a6626eea41966409f48d0fd135b8d2
   m_configObjects: {}

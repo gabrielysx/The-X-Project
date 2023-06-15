@@ -39,8 +39,8 @@ public class Enemy : MonoBehaviour
         return patrolPoints.Count;
     }
 
-    [SerializeField] protected int detectRange = 3;
-    [SerializeField] protected int attackRange = 1;
+    [SerializeField] protected float detectRange = 3;
+    [SerializeField] protected float attackRange = 1;
     [SerializeField] protected int baseHP = 5;
     [SerializeField] protected float baseSpeed = 2f;
 
@@ -219,13 +219,13 @@ public class Enemy : MonoBehaviour
     }
 
     //Detection
-    public bool IfWithinDetectRange()
+    public virtual bool IfWithinDetectRange()
     {
         float dis = Vector2.Distance(player.transform.position, transform.position);
         return (dis <= detectRange);
     }
 
-    public bool IfWithinAttackRange()
+    public virtual bool IfWithinAttackRange()
     {
         float dis = Vector2.Distance(player.transform.position, transform.position);
         return (dis <= attackRange);
@@ -341,8 +341,12 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage)
     {
+        float randX = Random.Range(-0.5f, 0.5f);
+        float randY = Random.Range(0, 1);
+        Vector2 randPos= (Vector2)transform.position + new Vector2(randX, randY);
+        UIManager.instance.GenerateDMGNumber(damage, randPos);
         if (currentHP <= 0)
         {
             isDead = true;
